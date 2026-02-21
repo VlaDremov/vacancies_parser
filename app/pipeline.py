@@ -55,16 +55,7 @@ class Pipeline:
             run_row = start_run(session, len(sources), now)
 
             for source in sources:
-                source_cfg = SourceConfig(
-                    id=source.id,
-                    company_name=source.company_name,
-                    careers_url=source.careers_url,
-                    parser_type=source.parser_type,
-                    country_hint=source.country_hint,
-                    enabled=source.enabled,
-                    selectors=source.selectors,
-                    extra=source_config_by_id.get(source.id).extra if source.id in source_config_by_id else {},
-                )
+                source_cfg = self._build_source_config(source=source, source_config_by_id=source_config_by_id)
 
                 try:
                     raw_jobs = self._fetch_and_parse(source_cfg)
@@ -212,6 +203,20 @@ class Pipeline:
                 time.sleep(delay)
 
         return []
+
+    @staticmethod
+    def _build_source_config(source: Source, source_config_by_id: dict[str, SourceConfig]) -> SourceConfig:
+        config_from_file = source_config_by_id.get(source.id)
+        return SourceConfig(
+            id=source.id,
+            company_name=source.company_name,
+            careers_url=source.careers_url,
+            parser_type=source.parser_type,
+            country_hint=source.country_hint,
+            enabled=source.enabled,
+            selectors=source.selectors,
+            extra=config_from_file.extra if config_from_file else {},
+        )
 
     @staticmethod
     def _compute_status(errors: dict[str, str], jobs_fetched: int) -> str:
