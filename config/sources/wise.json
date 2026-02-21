@@ -1,0 +1,20 @@
+{
+  "id": "wise",
+  "company_name": "Wise",
+  "careers_url": "https://wise.jobs/jobs",
+  "parser_type": "generic_html",
+  "country_hint": "UK",
+  "enabled": true,
+  "selectors": {
+    "job_card": ".attrax-vacancy-tile",
+    "title": ".attrax-vacancy-tile__title",
+    "link": ".attrax-vacancy-tile__title",
+    "location": ".attrax-vacancy-tile__location-freetext .attrax-vacancy-tile__item-value",
+    "description": ".attrax-vacancy-tile__description-value"
+  },
+  "pagination": {
+    "strategy": "query_param",
+    "max_pages": 8,
+    "page_param": "page"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "zalando",
+  "company_name": "Zalando",
+  "careers_url": "https://jobs.zalando.com/en/jobs",
+  "parser_type": "generic_html",
+  "country_hint": "Germany",
+  "enabled": true,
+  "selectors": {
+    "job_card": "main a[href^=\"/en/jobs/\"]",
+    "title": "h2",
+    "location": "p.text-ellipsis",
+    "description": "p.text-primary-black-60"
+  },
+  "pagination": {
+    "strategy": "offset_limit",
+    "max_pages": 7,
+    "limit": 15,
+    "url_template": "https://jobs.zalando.com/search?q=&filters=%7B%7D&limit={limit}&offset={offset}"
+  },
+  "json_job_url_template": "https://jobs.zalando.com/en/jobs/{id}-{slug}"
+}

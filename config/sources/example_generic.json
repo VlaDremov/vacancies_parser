@@ -1,0 +1,15 @@
+{
+  "id": "example_generic_company",
+  "company_name": "Example Generic Co",
+  "careers_url": "https://example.com/careers",
+  "parser_type": "generic_html",
+  "country_hint": "UK",
+  "enabled": false,
+  "selectors": {
+    "job_card": ".job-card",
+    "title": ".job-title",
+    "link": "a",
+    "location": ".job-location",
+    "description": ".job-description"
+  }
+}

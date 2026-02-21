@@ -1,0 +1,8 @@
+{
+  "id": "example_lever_company",
+  "company_name": "Example Lever Co",
+  "careers_url": "https://jobs.lever.co/example",
+  "parser_type": "lever",
+  "country_hint": "Germany",
+  "enabled": false
+}

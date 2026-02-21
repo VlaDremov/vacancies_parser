@@ -1,0 +1,8 @@
+{
+  "id": "example_workday_company",
+  "company_name": "Example Workday Co",
+  "careers_url": "https://example.wd5.myworkdayjobs.com/en-US/example/jobs",
+  "parser_type": "workday",
+  "country_hint": "Netherlands",
+  "enabled": false
+}

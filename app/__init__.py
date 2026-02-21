@@ -1,0 +1,1 @@
+"""Vacancy scraper application package."""

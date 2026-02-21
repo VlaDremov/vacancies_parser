@@ -1,0 +1,20 @@
+{
+  "id": "deliveryhero",
+  "company_name": "Delivery Hero",
+  "careers_url": "https://careers.deliveryhero.com/jobs",
+  "parser_type": "generic_html",
+  "country_hint": "Germany",
+  "enabled": true,
+  "selectors": {
+    "job_card": ".attrax-vacancy-tile",
+    "title": ".attrax-vacancy-tile__title",
+    "link": ".attrax-vacancy-tile__title",
+    "location": ".attrax-vacancy-tile__location-freetext .attrax-vacancy-tile__item-value",
+    "description": ".attrax-vacancy-tile__description-value"
+  },
+  "pagination": {
+    "strategy": "query_param",
+    "max_pages": 8,
+    "page_param": "page"
+  }
+}

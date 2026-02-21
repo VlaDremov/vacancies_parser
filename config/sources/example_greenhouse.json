@@ -1,0 +1,8 @@
+{
+  "id": "example_greenhouse_company",
+  "company_name": "Example Greenhouse Co",
+  "careers_url": "https://boards.greenhouse.io/example",
+  "parser_type": "greenhouse",
+  "country_hint": "UK",
+  "enabled": false
+}
