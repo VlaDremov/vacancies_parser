@@ -75,17 +75,19 @@ It does the following:
 
 - builds the Docker image
 - runs the scraper in the container
-- starts a PostgreSQL service container for the job
-- uses a non-persistent CI database at `postgresql+psycopg://postgres:postgres@127.0.0.1:5432/vacancies`
+- connects to an external PostgreSQL database using the `DATABASE_URL` GitHub secret
+- works with managed providers such as Neon
 
 Required repository secrets:
 
+- `DATABASE_URL`
 - `TELEGRAM_BOT_TOKEN`
 - `TELEGRAM_CHAT_ID`
 
-Important limitation:
+Important note:
 
-- The PostgreSQL service is ephemeral. GitHub creates a fresh database for each workflow run and destroys it when the job finishes, so dedupe history does not persist across runs.
+- For this project, the database URL should use the SQLAlchemy `psycopg` driver form: `postgresql+psycopg://...`
+- Example Neon shape: `postgresql+psycopg://USER:PASSWORD@HOST/DBNAME?sslmode=require`
 
 ## CLI
 
