@@ -1,0 +1,14 @@
+{
+  "data": [
+    {
+      "id": "tt-202",
+      "attributes": {
+        "title": "Applied Scientist",
+        "location": "Amsterdam, Netherlands",
+        "body": "Build recommendation models",
+        "published_at": "2026-01-05T09:00:00Z",
+        "human_status_url": "https://jobs.example.com/jobs/applied-scientist"
+      }
+    }
+  ]
+}

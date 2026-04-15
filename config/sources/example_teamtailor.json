@@ -1,0 +1,8 @@
+{
+  "id": "example_teamtailor_company",
+  "company_name": "Example Teamtailor Co",
+  "careers_url": "https://jobs.example.com",
+  "parser_type": "teamtailor",
+  "country_hint": "Netherlands",
+  "enabled": false
+}

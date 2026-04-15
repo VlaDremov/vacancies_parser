@@ -1,0 +1,18 @@
+{
+  "jobs": {
+    "items": [
+      {
+        "jobId": "gj-404",
+        "jobTitle": "LLM Engineer",
+        "jobUrl": "/roles/llm-engineer",
+        "meta": {
+          "location": "Remote, Europe",
+          "publishedAt": "2026-04-01T08:00:00Z"
+        },
+        "details": {
+          "summary": "Work on agent systems"
+        }
+      }
+    ]
+  }
+}

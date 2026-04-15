@@ -4,7 +4,7 @@ import argparse
 import sys
 
 from app.parsers import PARSER_REGISTRY
-from app.source_loader import iter_source_configs
+from app.source_loader import iter_source_configs, validate_source_config
 
 
 def parse_args() -> argparse.Namespace:
@@ -24,11 +24,18 @@ def main() -> int:
         return 1
 
     errors: list[str] = []
+    warnings: list[str] = []
     for source in sources:
         if source.parser_type not in PARSER_REGISTRY:
             errors.append(f"{source.id}: unknown parser type '{source.parser_type}'")
-        if not source.careers_url.startswith("http"):
-            errors.append(f"{source.id}: careers_url must be absolute URL")
+            continue
+
+        source_errors, source_warnings = validate_source_config(source)
+        errors.extend(f"{source.id}: {error}" for error in source_errors)
+        warnings.extend(f"{source.id}: {warning}" for warning in source_warnings)
+
+    for warning in warnings:
+        print(f"WARNING: {warning}")
 
     if errors:
         for error in errors:

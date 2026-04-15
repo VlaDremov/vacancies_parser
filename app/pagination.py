@@ -6,7 +6,9 @@ from app.types import SourceConfig
 
 
 def build_additional_page_urls(source: SourceConfig) -> list[str]:
-    pagination = source.extra.get("pagination")
+    pagination = source.pagination
+    if pagination is None and isinstance(source.extra.get("pagination"), dict):
+        pagination = source.extra.get("pagination")
     if not isinstance(pagination, dict):
         return []
 

@@ -12,10 +12,9 @@
     "description": "p.text-primary-black-60"
   },
   "pagination": {
-    "strategy": "offset_limit",
-    "max_pages": 7,
-    "limit": 15,
-    "url_template": "https://jobs.zalando.com/search?q=&filters=%7B%7D&limit={limit}&offset={offset}"
+    "strategy": "query_param",
+    "max_pages": 8,
+    "page_param": "page"
   },
-  "json_job_url_template": "https://jobs.zalando.com/en/jobs/{id}-{slug}"
+  "job_url_template": "https://jobs.zalando.com/en/jobs/{id}-{slug}"
 }

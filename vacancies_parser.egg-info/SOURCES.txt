@@ -8,6 +8,7 @@ app/logging_config.py
 app/matcher.py
 app/normalizer.py
 app/notifier.py
+app/pagination.py
 app/pipeline.py
 app/run_once.py
 app/settings.py
@@ -19,8 +20,12 @@ app/parsers/__init__.py
 app/parsers/base.py
 app/parsers/common.py
 app/parsers/generic_html.py
+app/parsers/generic_json.py
 app/parsers/greenhouse.py
 app/parsers/lever.py
+app/parsers/smartrecruiters.py
+app/parsers/teamtailor.py
+app/parsers/workable.py
 app/parsers/workday.py
 vacancies_parser.egg-info/PKG-INFO
 vacancies_parser.egg-info/SOURCES.txt

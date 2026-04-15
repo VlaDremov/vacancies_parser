@@ -71,13 +71,15 @@ class Pipeline:
 
                 jobs_fetched += len(raw_jobs)
                 for raw_job in raw_jobs:
-                    normalized = normalize_job(raw_job, company=source.company_name)
+                    normalized = normalize_job(raw_job, company=source.company_name, country_hint=source.country_hint)
                     vacancy = upsert_vacancy(session, normalized, now=now)
 
                     computed = compute_match(
                         normalized,
                         min_score=self.settings.min_match_score,
                         enable_remote_eu=self.settings.enable_remote_eu,
+                        match_profile=self.settings.match_profile,
+                        source_profile=source_cfg.matching_profile,
                     )
                     match_result = MatchResult(
                         vacancy_id=vacancy.id,
@@ -215,6 +217,10 @@ class Pipeline:
             country_hint=source.country_hint,
             enabled=source.enabled,
             selectors=source.selectors,
+            pagination=config_from_file.pagination if config_from_file else None,
+            parser_options=config_from_file.parser_options if config_from_file else None,
+            matching_profile=config_from_file.matching_profile if config_from_file else None,
+            job_url_template=config_from_file.job_url_template if config_from_file else None,
             extra=config_from_file.extra if config_from_file else {},
         )
 

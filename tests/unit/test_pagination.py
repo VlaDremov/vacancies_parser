@@ -8,12 +8,10 @@ def test_query_param_pagination_generates_follow_up_pages():
         company_name="Wise",
         careers_url="https://wise.jobs/jobs",
         parser_type="generic_html",
-        extra={
-            "pagination": {
-                "strategy": "query_param",
-                "max_pages": 4,
-                "page_param": "page",
-            }
+        pagination={
+            "strategy": "query_param",
+            "max_pages": 4,
+            "page_param": "page",
         },
     )
 
@@ -31,13 +29,11 @@ def test_offset_limit_pagination_generates_offsets():
         company_name="Zalando",
         careers_url="https://jobs.zalando.com/en/jobs",
         parser_type="generic_html",
-        extra={
-            "pagination": {
-                "strategy": "offset_limit",
-                "max_pages": 3,
-                "limit": 15,
-                "url_template": "https://jobs.zalando.com/search?q=&filters=%7B%7D&limit={limit}&offset={offset}",
-            }
+        pagination={
+            "strategy": "offset_limit",
+            "max_pages": 3,
+            "limit": 15,
+            "url_template": "https://jobs.zalando.com/search?q=&filters=%7B%7D&limit={limit}&offset={offset}",
         },
     )
 
@@ -45,4 +41,24 @@ def test_offset_limit_pagination_generates_offsets():
     assert urls == [
         "https://jobs.zalando.com/search?q=&filters=%7B%7D&limit=15&offset=15",
         "https://jobs.zalando.com/search?q=&filters=%7B%7D&limit=15&offset=30",
+    ]
+
+
+def test_generic_json_source_reuses_query_pagination():
+    source = SourceConfig(
+        id="json-api",
+        company_name="JSON API",
+        careers_url="https://api.example.com/jobs",
+        parser_type="generic_json",
+        pagination={
+            "strategy": "query_param",
+            "max_pages": 3,
+            "page_param": "page",
+        },
+    )
+
+    urls = build_additional_page_urls(source)
+    assert urls == [
+        "https://api.example.com/jobs?page=2",
+        "https://api.example.com/jobs?page=3",
     ]

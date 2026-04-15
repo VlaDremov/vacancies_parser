@@ -1,0 +1,8 @@
+{
+  "id": "example_workable_company",
+  "company_name": "Example Workable Co",
+  "careers_url": "https://apply.workable.com/example",
+  "parser_type": "workable",
+  "country_hint": "UK",
+  "enabled": false
+}

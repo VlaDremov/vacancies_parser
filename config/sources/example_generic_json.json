@@ -1,0 +1,24 @@
+{
+  "id": "example_json_api_company",
+  "company_name": "Example JSON API Co",
+  "careers_url": "https://api.example.com/jobs",
+  "parser_type": "generic_json",
+  "country_hint": "Germany",
+  "enabled": false,
+  "parser_options": {
+    "jobs_path": "jobs.items",
+    "fields": {
+      "title": "jobTitle",
+      "url": "jobUrl",
+      "external_id": "jobId",
+      "location": "meta.location",
+      "description": "details.summary",
+      "posted_at": "meta.publishedAt"
+    }
+  },
+  "pagination": {
+    "strategy": "query_param",
+    "max_pages": 3,
+    "page_param": "page"
+  }
+}

@@ -1,6 +1,10 @@
 from app.parsers.generic_html import GenericHtmlParser
+from app.parsers.generic_json import GenericJsonParser
 from app.parsers.greenhouse import GreenhouseParser
 from app.parsers.lever import LeverParser
+from app.parsers.smartrecruiters import SmartRecruitersParser
+from app.parsers.teamtailor import TeamtailorParser
+from app.parsers.workable import WorkableParser
 from app.parsers.workday import WorkdayParser
 
 
@@ -9,6 +13,10 @@ PARSER_REGISTRY = {
     "lever": LeverParser(),
     "workday": WorkdayParser(),
     "generic_html": GenericHtmlParser(),
+    "generic_json": GenericJsonParser(),
+    "smartrecruiters": SmartRecruitersParser(),
+    "teamtailor": TeamtailorParser(),
+    "workable": WorkableParser(),
 }
 
 

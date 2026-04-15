@@ -14,6 +14,10 @@ class SourceConfig:
     country_hint: str | None = None
     enabled: bool = True
     selectors: dict[str, str] = field(default_factory=dict)
+    pagination: dict[str, Any] | None = None
+    parser_options: dict[str, Any] | None = None
+    matching_profile: dict[str, Any] | None = None
+    job_url_template: str | None = None
     extra: dict[str, Any] = field(default_factory=dict)
 
 
