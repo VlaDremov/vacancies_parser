@@ -67,6 +67,26 @@ docker compose up --build
 docker compose run --rm app python -m app.run_once
 ```
 
+## GitHub Actions
+
+The repo includes [run-scraper.yml](/Users/vlad/Public/Coding_projects/vacancies_parser/.github/workflows/run-scraper.yml) to run the container on GitHub-hosted runners.
+
+It does the following:
+
+- builds the Docker image
+- runs the scraper in the container
+- starts a PostgreSQL service container for the job
+- uses a non-persistent CI database at `postgresql+psycopg://postgres:postgres@127.0.0.1:5432/vacancies`
+
+Required repository secrets:
+
+- `TELEGRAM_BOT_TOKEN`
+- `TELEGRAM_CHAT_ID`
+
+Important limitation:
+
+- The PostgreSQL service is ephemeral. GitHub creates a fresh database for each workflow run and destroys it when the job finishes, so dedupe history does not persist across runs.
+
 ## CLI
 
 - `python -m app.run_once`

@@ -1,0 +1,81 @@
+name: Run scraper
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: vacancies
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d vacancies"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@127.0.0.1:5432/vacancies
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      RUN_TIMEZONE: UTC
+      MIN_MATCH_SCORE: "0.60"
+      MAX_ITEMS_PER_DIGEST: "20"
+      DEDUPE_DAYS: "7"
+      MAX_FETCH_RETRIES: "3"
+      FETCH_TIMEOUT_SECONDS: "20"
+      RUN_TIMEOUT_MINUTES: "40"
+      SOURCE_CONFIG_DIR: config/sources
+      ENABLE_REMOTE_EU: "false"
+      MATCH_POSITIVE_TERMS_JSON: >-
+        {"machine_learning_engineer":{"weight":1.0,"terms":["machine learning engineer","ml engineer"]},"data_scientist":{"weight":1.0,"terms":["data scientist"]},"applied_scientist":{"weight":1.0,"terms":["applied scientist","applied science"]},"mlops_engineer":{"weight":1.0,"terms":["mlops engineer","ml ops engineer","mlops","ml ops"]},"research_engineer":{"weight":0.9,"terms":["research engineer"]},"ai_engineer":{"weight":0.9,"terms":["ai engineer"]},"ai_scientist":{"weight":0.95,"terms":["ai scientist"]},"machine_learning_scientist":{"weight":1.0,"terms":["machine learning scientist"]},"deep_learning_engineer":{"weight":0.95,"terms":["deep learning engineer"]},"computer_vision_engineer":{"weight":0.9,"terms":["computer vision engineer"]},"nlp_engineer":{"weight":0.9,"terms":["nlp engineer","natural language processing engineer"]},"llm_engineer":{"weight":0.9,"terms":["llm engineer","large language model engineer"]}}
+      MATCH_NEGATIVE_TERMS_JSON: >-
+        {"intern":{"weight":0.35,"terms":["intern","internship"]},"student":{"weight":0.35,"terms":["student"]},"sales":{"weight":0.25,"terms":["sales"]},"account_executive":{"weight":0.35,"terms":["account executive"]}}
+      MATCH_GEO_TERMS_JSON: >-
+        ["london","united kingdom","uk","england","germany","deutschland","berlin","munich","muenchen","hamburg","frankfurt","netherlands","nederland","amsterdam","rotterdam","the hague","utrecht","eindhoven"]
+      MATCH_REMOTE_TERMS_JSON: >-
+        ["remote","work from home","distributed"]
+      MATCH_REMOTE_REGION_TERMS_JSON: >-
+        ["europe","eu","emea"]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Build scraper image
+        run: docker build -t vacancies-parser .
+
+      - name: Run scraper container
+        run: |
+          docker run --rm \
+            --network host \
+            -e DATABASE_URL \
+            -e TELEGRAM_BOT_TOKEN \
+            -e TELEGRAM_CHAT_ID \
+            -e RUN_TIMEZONE \
+            -e MIN_MATCH_SCORE \
+            -e MAX_ITEMS_PER_DIGEST \
+            -e DEDUPE_DAYS \
+            -e MAX_FETCH_RETRIES \
+            -e FETCH_TIMEOUT_SECONDS \
+            -e RUN_TIMEOUT_MINUTES \
+            -e SOURCE_CONFIG_DIR \
+            -e ENABLE_REMOTE_EU \
+            -e MATCH_POSITIVE_TERMS_JSON \
+            -e MATCH_NEGATIVE_TERMS_JSON \
+            -e MATCH_GEO_TERMS_JSON \
+            -e MATCH_REMOTE_TERMS_JSON \
+            -e MATCH_REMOTE_REGION_TERMS_JSON \
+            vacancies-parser
