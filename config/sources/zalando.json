@@ -1,7 +1,7 @@
 {
   "id": "zalando",
   "company_name": "Zalando",
-  "careers_url": "https://jobs.zalando.com/en/jobs",
+  "careers_url": "https://jobs.zalando.com/en/jobs?page=1&size=48&category=Software+Engineering&category=Applied+Science+%26+Research",
   "parser_type": "generic_html",
   "country_hint": "Germany",
   "enabled": true,
@@ -13,7 +13,7 @@
   },
   "pagination": {
     "strategy": "query_param",
-    "max_pages": 8,
+    "max_pages": 20,
     "page_param": "page"
   },
   "job_url_template": "https://jobs.zalando.com/en/jobs/{id}-{slug}"

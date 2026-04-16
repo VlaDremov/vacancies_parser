@@ -1,7 +1,7 @@
 {
   "id": "wise",
   "company_name": "Wise",
-  "careers_url": "https://wise.jobs/jobs",
+  "careers_url": "https://wise.jobs/jobs?options=343&page=1&size=48",
   "parser_type": "generic_html",
   "country_hint": "UK",
   "enabled": true,
@@ -14,7 +14,7 @@
   },
   "pagination": {
     "strategy": "query_param",
-    "max_pages": 8,
+    "max_pages": 20,
     "page_param": "page"
   }
 }

@@ -1,7 +1,7 @@
 {
   "id": "deliveryhero",
   "company_name": "Delivery Hero",
-  "careers_url": "https://careers.deliveryhero.com/jobs",
+  "careers_url": "https://careers.deliveryhero.com/jobs?options=745&page=1&size=48",
   "parser_type": "generic_html",
   "country_hint": "Germany",
   "enabled": true,
@@ -14,7 +14,7 @@
   },
   "pagination": {
     "strategy": "query_param",
-    "max_pages": 8,
+    "max_pages": 20,
     "page_param": "page"
   }
 }
