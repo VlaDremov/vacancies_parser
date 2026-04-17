@@ -5,7 +5,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 import httpx
 
-from app.types import DigestItem
+from app.types import DigestItem, SourceRunSummary
 
 
 class NotifierError(RuntimeError):
@@ -50,6 +50,55 @@ def build_digest_message(
         ]
     )
     return "\n".join(lines)
+
+
+def build_run_summary_message(
+    summaries: list[SourceRunSummary],
+    run_at: datetime,
+    run_timezone: str = "UTC",
+) -> str:
+    tz_label = run_timezone
+    try:
+        tz = ZoneInfo(run_timezone)
+    except ZoneInfoNotFoundError:
+        tz = timezone.utc
+        tz_label = "UTC"
+
+    timestamp = run_at.astimezone(tz).strftime("%Y-%m-%d %H:%M")
+    successes = [summary for summary in summaries if summary.error is None]
+    failures = [summary for summary in summaries if summary.error is not None]
+    total_scraped = sum(summary.jobs_fetched for summary in successes)
+
+    lines = [
+        f"Scrape Summary | {timestamp} {tz_label}",
+        f"Vacancies scraped: {total_scraped} across {len(successes)}/{len(summaries)} sources",
+    ]
+
+    if successes:
+        lines.append("")
+        lines.append("Per company:")
+        sorted_successes = sorted(
+            successes,
+            key=lambda summary: (-summary.jobs_fetched, summary.company_name.lower()),
+        )
+        for summary in sorted_successes:
+            lines.append(f"- {summary.company_name}: {summary.jobs_fetched}")
+
+    if failures:
+        lines.append("")
+        lines.append(f"Errored sources ({len(failures)}):")
+        for summary in failures:
+            lines.append(f"- {summary.company_name} ({summary.careers_url}): {summary.error}")
+
+    return _truncate_to_telegram_limit("\n".join(lines))
+
+
+def _truncate_to_telegram_limit(text: str, max_chars: int = 3900) -> str:
+    if len(text) <= max_chars:
+        return text
+    suffix = "\n...(truncated)"
+    cutoff = max_chars - len(suffix)
+    return text[:cutoff] + suffix
 
 
 def send_telegram_message(bot_token: str, chat_id: str, text: str) -> None:

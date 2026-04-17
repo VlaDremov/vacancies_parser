@@ -66,6 +66,15 @@ class DigestItem:
 
 
 @dataclass(frozen=True)
+class SourceRunSummary:
+    source_id: str
+    company_name: str
+    careers_url: str
+    jobs_fetched: int
+    error: str | None = None
+
+
+@dataclass(frozen=True)
 class RunStats:
     run_id: int
     status: str
@@ -74,3 +83,4 @@ class RunStats:
     jobs_matched: int
     jobs_sent: int
     errors: dict[str, str]
+    source_summaries: list[SourceRunSummary] = field(default_factory=list)

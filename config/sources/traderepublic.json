@@ -1,0 +1,18 @@
+{
+  "id": "traderepublic",
+  "company_name": "Trade Republic",
+  "careers_url": "https://api.traderepublic.com/api/v1/career/jobs",
+  "parser_type": "generic_json",
+  "country_hint": "Germany",
+  "enabled": true,
+  "parser_options": {
+    "jobs_path": "jobs",
+    "fields": {
+      "title": "title",
+      "url": "absolute_url",
+      "external_id": "id",
+      "location": "location.name",
+      "posted_at": "updated_at"
+    }
+  }
+}

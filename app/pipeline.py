@@ -11,7 +11,7 @@ from app.db import Source, build_session_factory, init_db, session_scope
 from app.fetcher import BotBlockedError, FetchError, SourceFetcher
 from app.matcher import compute_match
 from app.normalizer import normalize_job
-from app.notifier import build_digest_message, send_telegram_message
+from app.notifier import NotifierError, build_digest_message, build_run_summary_message, send_telegram_message
 from app.pagination import build_additional_page_urls
 from app.parsers import get_parser
 from app.settings import Settings
@@ -25,7 +25,7 @@ from app.store import (
     upsert_source,
     upsert_vacancy,
 )
-from app.types import DigestItem, MatchResult, RawJob, RunStats, SourceConfig
+from app.types import DigestItem, MatchResult, RawJob, RunStats, SourceConfig, SourceRunSummary
 
 logger = logging.getLogger(__name__)
 
@@ -44,6 +44,7 @@ class Pipeline:
         jobs_matched = 0
         jobs_sent = 0
         digest_items: list[DigestItem] = []
+        source_summaries: list[SourceRunSummary] = []
 
         with session_scope(self.session_factory) as session:
             source_configs = list(iter_source_configs(self.settings.source_config_dir))
@@ -63,12 +64,39 @@ class Pipeline:
                     message = f"blocked by anti-bot policy: {exc}"
                     errors[source.id] = message
                     logger.warning("source_blocked", extra={"source_id": source.id, "reason": str(exc)})
+                    source_summaries.append(
+                        SourceRunSummary(
+                            source_id=source.id,
+                            company_name=source.company_name,
+                            careers_url=source.careers_url,
+                            jobs_fetched=0,
+                            error=message,
+                        )
+                    )
                     continue
                 except Exception as exc:  # pylint: disable=broad-exception-caught
                     errors[source.id] = str(exc)
                     logger.exception("source_failed", extra={"source_id": source.id})
+                    source_summaries.append(
+                        SourceRunSummary(
+                            source_id=source.id,
+                            company_name=source.company_name,
+                            careers_url=source.careers_url,
+                            jobs_fetched=0,
+                            error=str(exc),
+                        )
+                    )
                     continue
 
+                source_summaries.append(
+                    SourceRunSummary(
+                        source_id=source.id,
+                        company_name=source.company_name,
+                        careers_url=source.careers_url,
+                        jobs_fetched=len(raw_jobs),
+                        error=None,
+                    )
+                )
                 jobs_fetched += len(raw_jobs)
                 for raw_job in raw_jobs:
                     normalized = normalize_job(raw_job, company=source.company_name, country_hint=source.country_hint)
@@ -133,6 +161,22 @@ class Pipeline:
                 )
                 jobs_sent = len(to_send)
 
+            if notify and source_summaries:
+                summary_message = build_run_summary_message(
+                    source_summaries,
+                    run_at=now,
+                    run_timezone=self.settings.run_timezone,
+                )
+                try:
+                    send_telegram_message(
+                        bot_token=self.settings.telegram_bot_token,
+                        chat_id=self.settings.telegram_chat_id,
+                        text=summary_message,
+                    )
+                except NotifierError as exc:
+                    # ! Never let the summary message mask the primary digest / run status.
+                    logger.warning("run_summary_send_failed", extra={"reason": str(exc)})
+
             status = self._compute_status(errors=errors, jobs_fetched=jobs_fetched)
             finish_run(
                 run_row,
@@ -152,6 +196,7 @@ class Pipeline:
                 jobs_matched=jobs_matched,
                 jobs_sent=jobs_sent,
                 errors=errors,
+                source_summaries=source_summaries,
             )
 
     def _fetch_and_parse(self, source: SourceConfig) -> list[RawJob]:

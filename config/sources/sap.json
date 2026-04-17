@@ -1,0 +1,21 @@
+{
+  "id": "sap",
+  "company_name": "SAP",
+  "careers_url": "https://jobs.sap.com/search/?q=&q2=&alertId=&locationsearch=Germany",
+  "parser_type": "generic_html",
+  "country_hint": "Germany",
+  "enabled": true,
+  "selectors": {
+    "job_card": "tr.data-row",
+    "title": "a.jobTitle-link",
+    "link": "a.jobTitle-link",
+    "location": ".colLocation .jobLocation"
+  },
+  "pagination": {
+    "strategy": "offset_limit",
+    "max_pages": 16,
+    "limit": 25,
+    "start_offset": 0,
+    "url_template": "https://jobs.sap.com/search/?q=&q2=&alertId=&locationsearch=Germany&startrow={offset}"
+  }
+}

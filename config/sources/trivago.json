@@ -1,0 +1,14 @@
+{
+  "id": "trivago",
+  "company_name": "trivago",
+  "careers_url": "https://careers.trivago.com/jobs/?job_families=analytics",
+  "parser_type": "generic_html",
+  "country_hint": "Germany",
+  "enabled": true,
+  "selectors": {
+    "job_card": ".tdjp_open_positions_cards__item",
+    "title": "h2",
+    "link": "a.tdjp_open_positions_cards__item__cta",
+    "location": "tbody tr:nth-of-type(3) .tdjp_open_positions_cards__item__description__value"
+  }
+}
