@@ -1,0 +1,25 @@
+{
+  "id": "asos",
+  "company_name": "ASOS",
+  "careers_url": "https://RVMOB42DFH-dsn.algolia.net/1/indexes/production__asoscare2201__sort-rank?x-algolia-application-id=RVMOB42DFH&x-algolia-api-key=2b53aa632c86586c5c2ad89bc0791a7b&hitsPerPage=100&page=0&facetFilters=%5B%5B%22work_level%3AMid-senior%20level%22%5D%2C%5B%22department%3ATechnology%20%2B%20Data%22%5D%5D",
+  "parser_type": "generic_json",
+  "country_hint": "UK",
+  "enabled": true,
+  "parser_options": {
+    "jobs_path": "hits",
+    "url_base": "https://www.asoscareers.com",
+    "fields": {
+      "title": "title",
+      "url": "jd_url",
+      "external_id": "ats_requisition_id",
+      "location": "town_city",
+      "description": "description"
+    }
+  },
+  "pagination": {
+    "strategy": "query_param",
+    "max_pages": 20,
+    "start_page": 0,
+    "page_param": "page"
+  }
+}

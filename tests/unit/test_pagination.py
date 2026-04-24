@@ -62,3 +62,24 @@ def test_generic_json_source_reuses_query_pagination():
         "https://api.example.com/jobs?page=2",
         "https://api.example.com/jobs?page=3",
     ]
+
+
+def test_query_param_pagination_supports_zero_based_pages():
+    source = SourceConfig(
+        id="algolia",
+        company_name="Algolia",
+        careers_url="https://api.example.com/jobs?page=0",
+        parser_type="generic_json",
+        pagination={
+            "strategy": "query_param",
+            "max_pages": 3,
+            "start_page": 0,
+            "page_param": "page",
+        },
+    )
+
+    urls = build_additional_page_urls(source)
+    assert urls == [
+        "https://api.example.com/jobs?page=1",
+        "https://api.example.com/jobs?page=2",
+    ]

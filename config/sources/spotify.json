@@ -1,0 +1,17 @@
+{
+  "id": "spotify",
+  "company_name": "Spotify",
+  "careers_url": "https://api.lifeatspotify.com/wp-json/animal/v1/job/search?l=london%2Cberlin&c=machine-learning%2Cdata-science%2Cmachine-learning-data-research-insights",
+  "parser_type": "generic_json",
+  "country_hint": "UK",
+  "enabled": true,
+  "parser_options": {
+    "jobs_path": "result",
+    "fields": {
+      "title": "text",
+      "external_id": "id",
+      "description": "sub_category.name"
+    }
+  },
+  "job_url_template": "https://www.lifeatspotify.com/jobs/{id}"
+}

@@ -135,6 +135,42 @@ def test_generic_json_parser_extracts_jobs_from_nested_payload():
     assert jobs[0].location == "Remote, Europe"
 
 
+def test_generic_json_parser_resolves_url_base_and_location_objects():
+    content = """
+    {
+      "hits": [
+        {
+          "id": "staff-machine-learning-engineer-2",
+          "text": "Staff Machine Learning Engineer",
+          "locations": [{"location": "London"}, {"location": "Stockholm"}],
+          "jd_url": "/jobs/staff-machine-learning-engineer-2"
+        }
+      ]
+    }
+    """
+    parser = GenericJsonParser()
+    source = SourceConfig(
+        id="json-url-base",
+        company_name="JSON URL Base",
+        careers_url="https://api.example.com/search",
+        parser_type="generic_json",
+        parser_options={
+            "jobs_path": "hits",
+            "url_base": "https://example.com",
+            "fields": {
+                "title": "text",
+                "url": "jd_url",
+                "external_id": "id",
+            },
+        },
+    )
+
+    jobs = parser.parse(content, source)
+    assert len(jobs) == 1
+    assert jobs[0].url == "https://example.com/jobs/staff-machine-learning-engineer-2"
+    assert jobs[0].location == "London, Stockholm"
+
+
 def test_smartrecruiters_parser_extracts_jobs_from_json():
     content = (FIXTURES / "smartrecruiters.json").read_text(encoding="utf-8")
     parser = SmartRecruitersParser()

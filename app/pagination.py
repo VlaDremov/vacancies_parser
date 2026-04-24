@@ -25,7 +25,7 @@ def _build_query_param_urls(source: SourceConfig, pagination: dict) -> list[str]
     if max_pages <= 1:
         return []
 
-    start_page = _read_int(pagination.get("start_page"), default=1, minimum=1)
+    start_page = _read_int(pagination.get("start_page"), default=1, minimum=0)
     page_param = str(pagination.get("page_param", "page")).strip() or "page"
     base_url = str(pagination.get("base_url", source.careers_url)).strip() or source.careers_url
     template = str(pagination.get("url_template", "")).strip()

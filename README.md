@@ -1,6 +1,6 @@
-`# Hourly ML Vacancies Scraper
+# ML Vacancies Scraper
 
-Scrapes selected career pages hourly, matches ML-related vacancies, deduplicates notifications for 7 days, and sends Telegram digests.
+Scrapes selected career pages every 30 minutes, matches ML-related vacancies, deduplicates notifications for 7 days, and sends Telegram digests.
 
 ## Features
 
@@ -9,7 +9,7 @@ Scrapes selected career pages hourly, matches ML-related vacancies, deduplicates
 - Weighted title/description matching for ML roles
 - Geography gate for London, Germany, Netherlands
 - PostgreSQL-backed deduplication and run logging
-- Hourly Telegram digest with links to new vacancies
+- Twice-hourly Telegram digest with links to new vacancies
 - Run overlap protection (file lock) and timeout guard
 
 ## Source configuration
@@ -100,5 +100,5 @@ Important note:
 Use host cron in UTC:
 
 ```cron
-0 * * * * docker compose run --rm app python -m app.run_once
+15,45 * * * * docker compose run --rm app python -m app.run_once
 ```

@@ -72,7 +72,9 @@ def _resolve_url(
 ) -> str:
     url = read_text_path(item, _field(fields, "url"))
     if url:
-        return anchor_url(source.careers_url, url)
+        parser_options = source.parser_options or {}
+        base_url = str(parser_options.get("url_base") or source.careers_url).strip() or source.careers_url
+        return anchor_url(base_url, url)
 
     if not source.job_url_template or not external_id:
         return ""
@@ -94,6 +96,23 @@ def _resolve_location(item: dict, fields: dict) -> str:
         text = ", ".join(str(value).strip() for value in offices if str(value).strip())
         if text:
             return text
+
+    locations = item.get("locations")
+    if isinstance(locations, list):
+        parts = []
+        for value in locations:
+            if isinstance(value, dict):
+                text = (
+                    read_text_path(value, "location")
+                    or read_text_path(value, "name")
+                    or read_text_path(value, "city")
+                )
+            else:
+                text = str(value).strip()
+            if text:
+                parts.append(text)
+        if parts:
+            return ", ".join(dict.fromkeys(parts))
 
     location_value = item.get("location")
     if isinstance(location_value, dict):

@@ -13,7 +13,7 @@ REQUIRED_KEYS = {"id", "company_name", "careers_url", "parser_type"}
 KNOWN_SELECTOR_KEYS = {"job_card", "title", "link", "location", "description", "posted_at", "external_id"}
 PARSER_OPTION_KEYS = {
     "generic_html": set(),
-    "generic_json": {"jobs_path", "fields"},
+    "generic_json": {"jobs_path", "fields", "url_base"},
     "greenhouse": set(),
     "lever": set(),
     "smartrecruiters": set(),
@@ -170,8 +170,8 @@ def _validate_pagination_config(pagination: dict[str, Any]) -> list[str]:
 
     if strategy in {"query_param", "attrax_page_query"}:
         start_page = _try_int(pagination.get("start_page", 1))
-        if start_page is None or start_page < 1:
-            errors.append("pagination.start_page must be an integer >= 1")
+        if start_page is None or start_page < 0:
+            errors.append("pagination.start_page must be an integer >= 0")
 
     if strategy == "offset_limit":
         limit = _try_int(pagination.get("limit", 15))
