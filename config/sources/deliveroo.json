@@ -1,0 +1,14 @@
+{
+  "id": "deliveroo",
+  "company_name": "Deliveroo",
+  "careers_url": "https://careers.deliveroo.co.uk/",
+  "parser_type": "generic_html",
+  "country_hint": "UK",
+  "enabled": true,
+  "selectors": {
+    "job_card": "a[href*='/role/']",
+    "title": "h3",
+    "link": "a[href*='/role/']",
+    "location": "p"
+  }
+}

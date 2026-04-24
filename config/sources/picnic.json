@@ -1,0 +1,15 @@
+{
+  "id": "picnic",
+  "company_name": "Picnic",
+  "careers_url": "https://jobs.picnic.app/jobs",
+  "parser_type": "generic_html",
+  "country_hint": "Netherlands",
+  "enabled": true,
+  "selectors": {
+    "job_card": "a[href*='/vacancies/']",
+    "title": "h4",
+    "link": "a[href*='/vacancies/']",
+    "location": "div > div:nth-of-type(3) p",
+    "description": "div > div:nth-of-type(2) p"
+  }
+}

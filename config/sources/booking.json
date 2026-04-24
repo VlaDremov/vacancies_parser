@@ -1,0 +1,8 @@
+{
+  "id": "booking",
+  "company_name": "Booking.com",
+  "careers_url": "https://careers.booking.com/teams/machine-learning/",
+  "parser_type": "generic_html",
+  "country_hint": "Netherlands",
+  "enabled": true
+}

@@ -1,0 +1,17 @@
+{
+  "id": "sennder",
+  "company_name": "sennder",
+  "careers_url": "https://jobs.gem.com/api/public/graphql?operationName=JobBoardList&variables=%7B%22boardId%22%3A%22senndertechnologies-gmbh%22%7D&query=query%20JobBoardList%28%24boardId%3A%20String%21%29%20%7B%20oatsExternalJobPostings%28boardId%3A%20%24boardId%29%20%7B%20jobPostings%20%7B%20extId%20title%20locations%20%7B%20name%20city%20isoCountry%20isRemote%20%7D%20%7D%20%7D%20%7D",
+  "parser_type": "generic_json",
+  "country_hint": "Germany",
+  "enabled": true,
+  "parser_options": {
+    "jobs_path": "data.oatsExternalJobPostings.jobPostings",
+    "fields": {
+      "title": "title",
+      "external_id": "extId",
+      "location": "locations.0.name"
+    }
+  },
+  "job_url_template": "https://jobs.gem.com/senndertechnologies-gmbh/{id}"
+}

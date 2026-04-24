@@ -1,0 +1,19 @@
+{
+  "id": "payrails",
+  "company_name": "Payrails",
+  "careers_url": "https://api.ashbyhq.com/posting-api/job-board/payrails",
+  "parser_type": "generic_json",
+  "country_hint": "Germany",
+  "enabled": true,
+  "parser_options": {
+    "jobs_path": "jobs",
+    "fields": {
+      "title": "title",
+      "url": "jobUrl",
+      "external_id": "id",
+      "location": "location",
+      "description": "descriptionHtml",
+      "posted_at": "publishedAt"
+    }
+  }
+}

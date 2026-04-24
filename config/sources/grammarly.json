@@ -1,0 +1,8 @@
+{
+  "id": "grammarly",
+  "company_name": "Grammarly",
+  "careers_url": "https://superhuman.com/company/careers/jobs",
+  "parser_type": "generic_html",
+  "country_hint": "Germany",
+  "enabled": true
+}
