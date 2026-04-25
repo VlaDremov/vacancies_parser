@@ -3,7 +3,7 @@ name: Run scraper
 on:
   workflow_dispatch:
   schedule:
-    - cron: "15,45 * * * *"
+    - cron: "15 * * * *"
 
 permissions:
   contents: read
