@@ -1,8 +1,0 @@
-{
-  "id": "hellofresh",
-  "company_name": "HelloFresh",
-  "careers_url": "https://careers.hellofresh.com/global/en/roles",
-  "parser_type": "generic_html",
-  "country_hint": "Germany",
-  "enabled": true
-}
