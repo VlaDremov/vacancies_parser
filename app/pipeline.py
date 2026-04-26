@@ -49,10 +49,30 @@ class Pipeline:
         with session_scope(self.session_factory) as session:
             source_configs = list(iter_source_configs(self.settings.source_config_dir))
             source_config_by_id = {cfg.id: cfg for cfg in source_configs}
+            configured_source_ids = set(source_config_by_id)
             for source_config in source_configs:
                 upsert_source(session, source_config)
 
-            sources = list(session.scalars(select(Source).where(Source.enabled.is_(True))))
+            stale_sources = list(
+                session.scalars(
+                    select(Source).where(
+                        Source.enabled.is_(True),
+                        ~Source.id.in_(configured_source_ids),
+                    )
+                )
+            )
+            for stale_source in stale_sources:
+                stale_source.enabled = False
+                logger.info("source_disabled_missing_config", extra={"source_id": stale_source.id})
+
+            sources = list(
+                session.scalars(
+                    select(Source).where(
+                        Source.enabled.is_(True),
+                        Source.id.in_(configured_source_ids),
+                    )
+                )
+            )
             run_row = start_run(session, len(sources), now)
 
             for source in sources:

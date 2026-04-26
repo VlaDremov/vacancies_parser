@@ -94,6 +94,80 @@ def test_pipeline_logs_partial_failure(tmp_path):
         assert {source.id for source in sources} == {"good", "bad"}
 
 
+def test_pipeline_disables_sources_missing_from_config(tmp_path):
+    source_dir = tmp_path / "sources"
+    source_dir.mkdir(parents=True)
+
+    (source_dir / "current.json").write_text(
+        """
+        {
+          "id": "current",
+          "company_name": "CurrentCo",
+          "careers_url": "https://example.com/current",
+          "parser_type": "generic_html",
+          "enabled": true
+        }
+        """,
+        encoding="utf-8",
+    )
+
+    db_url = f"sqlite:///{tmp_path / 'stale.sqlite'}"
+    settings = Settings(
+        database_url=db_url,
+        telegram_bot_token="",
+        telegram_chat_id="",
+        run_timezone="UTC",
+        min_match_score=0.62,
+        max_items_per_digest=20,
+        dedupe_days=7,
+        max_fetch_retries=1,
+        fetch_timeout_seconds=5,
+        run_timeout_minutes=40,
+        source_config_dir=str(source_dir),
+        enable_remote_eu=False,
+    )
+
+    pipeline = Pipeline(settings)
+    session_factory = build_session_factory(db_url)
+    now = datetime.now(timezone.utc)
+    with session_factory() as session:
+        session.add(
+            Source(
+                id="hellofresh",
+                company_name="HelloFresh",
+                careers_url="https://careers.hellofresh.com/global/en/roles",
+                parser_type="generic_html",
+                country_hint=None,
+                selectors={},
+                enabled=True,
+                created_at=now,
+                updated_at=now,
+            )
+        )
+        session.commit()
+
+    fetched_source_ids = []
+
+    def fake_fetch_and_parse(source: SourceConfig):
+        fetched_source_ids.append(source.id)
+        return []
+
+    pipeline._fetch_and_parse = fake_fetch_and_parse  # type: ignore[attr-defined]
+
+    result = pipeline.run(run_at=now, notify=False)
+
+    assert result.sources_total == 1
+    assert fetched_source_ids == ["current"]
+
+    with session_factory() as session:
+        stale_source = session.get(Source, "hellofresh")
+        current_source = session.get(Source, "current")
+        assert stale_source is not None
+        assert stale_source.enabled is False
+        assert current_source is not None
+        assert current_source.enabled is True
+
+
 def test_pipeline_handles_mixed_source_types_end_to_end(tmp_path):
     source_dir = tmp_path / "sources"
     source_dir.mkdir(parents=True)
